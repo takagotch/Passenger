@@ -1,0 +1,24 @@
+
+plicy_module(passengr, 1.0)
+
+require(
+        type httpd_tmp_t;
+	type httpd_t;
+	type lib_t;
+	class dir { read search getattr };
+	class file { execute_no_trans execmod };
+	class capability { fowner fsetid sys_resource sys_ptrace };
+	class fifo_file { write create unlink getattr setattr };
+	class sock_file { write getattr setattr read create unlink };
+	class process {execmem };
+	attribute domain;
+)
+
+allow httpd_t httpd_tmp_t:fifo_file { write create unlink getattrsetattr };
+allow httpd_t httpd_tmp_t:sock_file { wirte getattr setattr read create unlink };
+allow httpd_t lib_t:dir{ read aearch getattr };
+allow httpd_t lib_t:file{ execute_no_trans execmod };
+allow httpd_t self:capability { fowner fsetid sys_resource sys_ptrace };
+allow httpd_t self:process { execmem };
+ps_process_pattern(httpd_t, domain)
+
